@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 class SchemaController extends Controller
 {
-    public function index(Request $request, BhadhanDBManagerService $bhadhanService)
+    public function index(Request $request)
     {
         if (config('bhadhan.mode') != 'dev') {
             dd('Sorry The Environment Is In Production');
@@ -33,5 +33,16 @@ class SchemaController extends Controller
         }
 
         return view('Bhadhan::schema');
+    }
+
+    public function performanceMetrics(Request $request)
+    {
+        if ($request->has('isAjax') && $request->isAjax) {
+            $data['tableWithSizes'] = BhadhanDBManagerService::getAllTableWithSize();
+            $data['totalSchemaSize'] = BhadhanDBManagerService::getCurrentSchemaSize();
+            return response()->json($data);
+        }
+
+        return view('Bhadhan::performance-metrics');
     }
 }

@@ -25,7 +25,12 @@
                             class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link f-w-b-1 active-link" href="#">Schema</a>
+                    <a class="nav-link f-w-b-1 {{ Request::is('bhadhan/db-manager/schema') ? 'active-link' : '' }}"
+                        href="{{ route('bhadhan-db-manager.schema') }}">Schema</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link f-w-b-1 {{ Request::is('bhadhan/db-manager/performance-metrics') ? 'active-link' : '' }}"
+                        href="{{ route('bhadhan-db-manager.performance') }}">Performance Metrics</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link f-w-b-1 dropdown-toggle" href="#" id="navbarDropdown" role="button"
@@ -50,9 +55,6 @@
 
     @yield('content')
 
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-        integrity="sha384-KJ3o2DKtIkvYIK3UENzmW3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
-    </script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
         integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
     </script>
