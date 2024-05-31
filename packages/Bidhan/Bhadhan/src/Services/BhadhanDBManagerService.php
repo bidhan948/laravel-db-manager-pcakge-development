@@ -6,6 +6,11 @@ use Illuminate\Support\Facades\DB;
 
 class BhadhanDBManagerService
 {
+    public static function getCurrentDatabaseConnection()
+    {
+        return config('bhadhan.db_connection');
+    }
+
     public static function getCurrentDatabaseName()
     {
         return DB::connection()->getDatabaseName();
@@ -47,5 +52,57 @@ class BhadhanDBManagerService
                             tc.constraint_type = 'PRIMARY KEY' 
                             AND tc.table_name = ?
                             AND kcu.column_name = 'id';", [$table]);
+    }
+
+    public static function getAllTableWithSize()
+    {
+        if (BhadhanDBManagerService::getCurrentDatabaseConnection() == 'pgsql') {
+            $data = DB::select("SELECT
+                                schemaname || '.' || tablename AS table_name,
+                                pg_size_pretty(pg_total_relation_size(schemaname || '.' || tablename)) AS total_size
+                            FROM
+                                pg_tables
+                            WHERE
+                                schemaname NOT IN ('pg_catalog', 'information_schema')
+                            ORDER BY
+                                pg_total_relation_size(schemaname || '.' || tablename) DESC
+                            LIMIT 10;");
+        }
+
+        if (BhadhanDBManagerService::getCurrentDatabaseConnection() == 'mysql') {
+            $data = DB::select("SELECT
+                                    table_name AS table_name,
+                                    ROUND(((data_length + index_length) / 1024 / 1024), 2) AS total_size_mb
+                                FROM
+                                    information_schema.tables
+                                WHERE
+                                    table_schema = 'your_database_name'
+                                ORDER BY
+                                    (data_length + index_length) DESC
+                                LIMIT 10;
+                                ");
+        }
+
+        return $data;
+    }
+
+    public static function getCurrentSchemaSize()
+    {
+        if (BhadhanDBManagerService::getCurrentDatabaseConnection() == 'pgsql') {
+            $data = DB::select("SELECT pg_size_pretty(pg_database_size('lab')) AS total_size;");
+        }
+
+        if (BhadhanDBManagerService::getCurrentDatabaseConnection() == 'mysql') {
+            $data = DB::select("SELECT
+                                    table_schema AS database_name,
+                                    ROUND(SUM(data_length + index_length) / 1024 / 1024, 2) AS total_size_mb
+                                FROM
+                                    information_schema.tables
+                                WHERE
+                                    table_schema = 'lab';
+                                ");
+        }
+
+        return $data ?? 'not defined';
     }
 }

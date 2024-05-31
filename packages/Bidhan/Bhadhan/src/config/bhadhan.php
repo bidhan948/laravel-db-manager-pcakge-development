@@ -1,5 +1,6 @@
 <?php
 
 return [
-    'mode' => 'dev'
+    'mode' => 'dev',
+    'db_connection' => env('DB_CONNECTION')
 ];
