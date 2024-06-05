@@ -17,7 +17,7 @@
                         <template v-for="(table, tableKey) in schemas.tables">
                             <tr class="lh-08 db-table cursor-pointer" @click="toggleDetails(tableKey)">
                                 <td scope="col"><strong>+</strong></td>
-                                <td scope="col" v-text="table.table_name"></td>
+                                <td scope="col" class="font-weight-bold" v-text="table.table_name"></td>
                             </tr>
                             <tr v-if="currentTable === tableKey">
                                 <td colspan="2">
@@ -123,7 +123,7 @@
                     let vm = this;
                     foreignKey = vm.foreignKeys.find(key => key.column_name === columnName);
                     if (foreignKey) {
-                        return 'FOREIGN KEY ( <i>' + foreignKey.column_name + '</i>) REFERENCES <i>' +
+                        return 'FOREIGN KEY REFERENCES <i>' +
                             foreignKey.foreign_table_name + ' </i>WITH CONSTRAINED : <i>' + foreignKey.constraint_name + '</i>';
                     }
                     return null;
