@@ -21,8 +21,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link f-w-b-1" href="{{ url('check-check') }}">Dashboard <span
-                            class="sr-only">(current)</span></a>
+                    <a class="nav-link f-w-b-1" href="{{ url('check-check') }}">Dashboard </a>
                 </li>
                 <li class="nav-item active">
                     <a class="nav-link f-w-b-1 {{ Request::is('bhadhan/db-manager/schema') ? 'active-link' : '' }}"
@@ -45,11 +44,6 @@
                     </div>
                 </li>
             </ul>
-            <form class="form-inline my-lg-0">
-                <input class="form-control form-control-sm mr-sm-2 h-25" type="search" placeholder="Search"
-                    aria-label="Search">
-                <button class="btn btn-outline-success btn-sm my-sm-0 top-bar-button" type="submit">Search</button>
-            </form>
         </div>
     </nav>
 

@@ -3,6 +3,7 @@
 @section('title', 'DB - SCHEMA | Performance Metrics')
 
 @section('content')
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
     <div id="vue_app">
         <div class="container-fluid">
             <div class="col-12">
@@ -42,7 +43,8 @@
                             <tr class="f-08 text-white">
                                 <td v-text="dbView.table_schema" class="lh-06"></td>
                                 <td v-html="'<i>' + dbView.view_name + '</i>'" class="lh-06 cursor-pointer"
-                                    data-toggle="modal" data-target="#exampleModal" @click="openModal(dbViewKey)"></td>
+                                    data-bs-toggle="modal" data-bs-target="#exampleModal" @click="openModal(dbViewKey)">
+                                </td>
                                 <td v-text="dbView.is_updatable == 'NO' ? '❌': '✅'" class="lh-06"></td>
                                 <td v-html="'<i>' + dbView.check_option+'</i>'" class="lh-06"></td>
                             </tr>
@@ -51,9 +53,9 @@
                 </table>
 
                 <!-- Modal -->
-                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
                     aria-hidden="true">
-                    <div class="modal-dialog">
+                    <div class="modal-dialog modal-xl">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="exampleModalLabel">View Definitions :</h5>
@@ -62,13 +64,12 @@
                             </div>
                             <div class="modal-body">
                                 <div class="container">
-                                    <p v-html="modalDbView?.view_definition">
-                                    </p>
+                                    <pre><code class="language-sql f-09" v-html="formattedViewDefinition"></code></pre>
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">Save changes</button>
+                                <button type="button" class="btn btn-secondary btn-sm"
+                                    data-bs-dismiss="modal">Close</button>
                             </div>
                         </div>
                     </div>
@@ -79,6 +80,8 @@
 @endsection
 
 @section('scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-sql.min.js"></script>
     <script>
         new Vue({
             el: "#vue_app",
@@ -87,6 +90,14 @@
                 tableWithSizes: [],
                 dbViews: [],
                 modalDbView: {}
+            },
+            computed: {
+                formattedViewDefinition() {
+                    if (this.modalDbView && this.modalDbView.view_definition) {
+                        return Prism.highlight(this.modalDbView.view_definition, Prism.languages.sql, 'sql');
+                    }
+                    return '';
+                }
             },
             methods: {
                 loadSchema: function() {
@@ -99,15 +110,16 @@
                         vm.totalSchemaSize = res.data?.totalSchemaSize[0]?.total_size;
                         vm.tableWithSizes = res.data?.tableWithSizes;
                         vm.dbViews = res.data?.dbViews;
-                        console.log(vm.totalSchemaSize);
                     }).catch(function(err) {
                         console.log(err);
                     });
                 },
                 openModal: function(dbViewKey) {
                     let vm = this;
-                    console.log('ok');
                     vm.modalDbView = vm.dbViews[dbViewKey];
+                    this.$nextTick(() => {
+                        Prism.highlightAll();
+                    });
                 }
             },
             mounted() {
