@@ -41,13 +41,38 @@
                         <template v-for="(dbView,dbViewKey) in dbViews">
                             <tr class="f-08 text-white">
                                 <td v-text="dbView.table_schema" class="lh-06"></td>
-                                <td v-text="dbView.view_name" class="lh-06"></td>
+                                <td v-html="'<i>' + dbView.view_name + '</i>'" class="lh-06 cursor-pointer"
+                                    data-toggle="modal" data-target="#exampleModal" @click="openModal(dbViewKey)"></td>
                                 <td v-text="dbView.is_updatable == 'NO' ? '❌': '✅'" class="lh-06"></td>
                                 <td v-html="'<i>' + dbView.check_option+'</i>'" class="lh-06"></td>
                             </tr>
                         </template>
                     </tbody>
                 </table>
+
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">View Definitions :</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="container">
+                                    <p v-html="modalDbView?.view_definition">
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -61,6 +86,7 @@
                 totalSchemaSize: null,
                 tableWithSizes: [],
                 dbViews: [],
+                modalDbView: {}
             },
             methods: {
                 loadSchema: function() {
@@ -77,6 +103,11 @@
                     }).catch(function(err) {
                         console.log(err);
                     });
+                },
+                openModal: function(dbViewKey) {
+                    let vm = this;
+                    console.log('ok');
+                    vm.modalDbView = vm.dbViews[dbViewKey];
                 }
             },
             mounted() {
