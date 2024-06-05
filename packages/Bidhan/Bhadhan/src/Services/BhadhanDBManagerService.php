@@ -6,6 +6,13 @@ use Illuminate\Support\Facades\DB;
 
 class BhadhanDBManagerService
 {
+    private $currentConnection = '';
+
+    public function __construct()
+    {
+        $this->currentConnection = config('bhadhan.db_connection');
+    }
+
     public static function getCurrentDatabaseConnection()
     {
         return config('bhadhan.db_connection');
@@ -89,7 +96,7 @@ class BhadhanDBManagerService
     public static function getCurrentSchemaSize()
     {
         if (BhadhanDBManagerService::getCurrentDatabaseConnection() == 'pgsql') {
-            $data = DB::select("SELECT pg_size_pretty(pg_database_size('lab')) AS total_size;");
+            $data = DB::select("SELECT pg_size_pretty(pg_database_size('" . BhadhanDBManagerService::getCurrentDatabaseName() . "')) AS total_size;");
         }
 
         if (BhadhanDBManagerService::getCurrentDatabaseConnection() == 'mysql') {
@@ -103,6 +110,28 @@ class BhadhanDBManagerService
                                 ");
         }
 
-        return $data ?? 'not defined';
+        return $data ?? [];
+    }
+
+
+    public static function getAllDBViews()
+    {
+        if (BhadhanDBManagerService::getCurrentDatabaseConnection() == 'pgsql') {
+            $data = DB::select("SELECT
+                                    table_schema,
+                                    table_name AS view_name,
+                                    view_definition,
+                                    is_updatable,
+                                    check_option
+                                FROM
+                                    information_schema.views
+                                WHERE
+                                    table_schema NOT IN ('pg_catalog', 'information_schema')
+                                ORDER BY
+                                    table_schema,
+                                    table_name;");
+        }
+
+        return $data ?? [];
     }
 }

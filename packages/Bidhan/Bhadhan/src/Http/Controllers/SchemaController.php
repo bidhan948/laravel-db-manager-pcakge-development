@@ -40,6 +40,7 @@ class SchemaController extends Controller
         if ($request->has('isAjax') && $request->isAjax) {
             $data['tableWithSizes'] = BhadhanDBManagerService::getAllTableWithSize();
             $data['totalSchemaSize'] = BhadhanDBManagerService::getCurrentSchemaSize();
+            $data['dbViews'] = BhadhanDBManagerService::getAllDBViews();
             return response()->json($data);
         }
 
