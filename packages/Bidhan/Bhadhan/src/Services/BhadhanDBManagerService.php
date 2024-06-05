@@ -118,6 +118,7 @@ class BhadhanDBManagerService
     {
         if (BhadhanDBManagerService::getCurrentDatabaseConnection() == 'pgsql') {
             $data = DB::select("SELECT
+                                    table_catalog,
                                     table_schema,
                                     table_name AS view_name,
                                     view_definition,
