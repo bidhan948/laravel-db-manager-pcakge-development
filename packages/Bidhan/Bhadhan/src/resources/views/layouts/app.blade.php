@@ -21,7 +21,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link f-w-b-1" href="{{ url('check-check') }}">Dashboard </a>
+                    <a class="nav-link f-w-b-1" href="{{ url('bhadhan/dashboard') }}">Dashboard </a>
                 </li>
                 <li class="nav-item active">
                     <a class="nav-link f-w-b-1 {{ Request::is('bhadhan/db-manager/schema') ? 'active-link' : '' }}"
@@ -31,17 +31,9 @@
                     <a class="nav-link f-w-b-1 {{ Request::is('bhadhan/db-manager/performance-metrics') ? 'active-link' : '' }}"
                         href="{{ route('bhadhan-db-manager.performance') }}">Performance Metrics</a>
                 </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link f-w-b-1 dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        More
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                    </div>
+                <li class="nav-item active">
+                    <a class="nav-link f-w-b-1 {{ Request::is('bhadhan/db-manager/sql') ? 'active-link' : '' }}"
+                        href="{{ route('bhadhan-db-manager.sql') }}">SQL</a>
                 </li>
             </ul>
         </div>

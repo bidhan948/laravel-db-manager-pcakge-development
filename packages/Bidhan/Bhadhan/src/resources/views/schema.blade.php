@@ -17,7 +17,7 @@
                         <template v-for="(table, tableKey) in schemas.tables">
                             <tr class="lh-08 db-table cursor-pointer" @click="toggleDetails(tableKey)">
                                 <td scope="col"><strong>+</strong></td>
-                                <td scope="col" class="font-weight-bold" v-text="table.table_name"></td>
+                                <td scope="col" class="font-weight-bold" v-html="'<strong>'+table.table_name+'</strong>'"></td>
                             </tr>
                             <tr v-if="currentTable === tableKey">
                                 <td colspan="2">
@@ -97,7 +97,8 @@
                             tableName: vm.schemas.tables[tableKey].table_name,
                         }
                     }).then(function(res) {
-                        vm.$set(vm.schemas.tables[tableKey], 'columns', res.data[vm.schemas.tables[tableKey].table_name]);
+                        vm.$set(vm.schemas.tables[tableKey], 'columns', res.data[vm.schemas.tables[
+                            tableKey].table_name]);
                         vm.currentTableName = vm.schemas?.tables[tableKey]?.table_name;
                         vm.primaryColumn = res.data.primary_key[0].column_name;
                         vm.foreignKeys = res.data.foreign_keys;
@@ -124,7 +125,8 @@
                     foreignKey = vm.foreignKeys.find(key => key.column_name === columnName);
                     if (foreignKey) {
                         return 'FOREIGN KEY REFERENCES <i>' +
-                            foreignKey.foreign_table_name + ' </i>WITH CONSTRAINED : <i>' + foreignKey.constraint_name + '</i>';
+                            foreignKey.foreign_table_name + ' </i>WITH CONSTRAINED : <i>' + foreignKey
+                            .constraint_name + '</i>';
                     }
                     return null;
                 }

@@ -4,12 +4,14 @@ namespace Bidhan\Bhadhan\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Bidhan\Bhadhan\Services\BhadhanDBManagerService;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class SchemaController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request): View | JsonResponse
     {
         if (config('bhadhan.mode') != 'dev') {
             dd('Sorry The Environment Is In Production');
@@ -35,7 +37,7 @@ class SchemaController extends Controller
         return view('Bhadhan::schema');
     }
 
-    public function performanceMetrics(Request $request)
+    public function performanceMetrics(Request $request): View | JsonResponse
     {
         if ($request->has('isAjax') && $request->isAjax) {
             $data['tableWithSizes'] = BhadhanDBManagerService::getAllTableWithSize();
@@ -45,5 +47,10 @@ class SchemaController extends Controller
         }
 
         return view('Bhadhan::performance-metrics');
+    }
+
+    public function sql(): View | JsonResponse
+    {
+        return view('Bhadhan::sql-editor');
     }
 }

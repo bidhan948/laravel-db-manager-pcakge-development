@@ -105,6 +105,11 @@ body,
     cursor: pointer;
 }
 
+.sql-label{
+    text-align: center;
+    color: white;
+}
+
 /* ANIMATION ALERT */
 @keyframes wave {
     0% {
