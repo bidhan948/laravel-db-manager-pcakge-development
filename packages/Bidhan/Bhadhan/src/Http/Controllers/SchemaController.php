@@ -7,6 +7,7 @@ use Bidhan\Bhadhan\Services\BhadhanDBManagerService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 
 class SchemaController extends Controller
@@ -52,5 +53,17 @@ class SchemaController extends Controller
     public function sql(): View | JsonResponse
     {
         return view('Bhadhan::sql-editor');
+    }
+
+    public function sqlToData(Request $request): ?JsonResponse
+    {
+        try {
+            $rawSql = $request->rawSql;
+            $data['fetchFromSql'] = DB::select($rawSql);
+            $data['columnNames'] = count($data['fetchFromSql']) ?  array_keys((array)$data['fetchFromSql'][0]) : [];
+            return response()->json($data);
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 }

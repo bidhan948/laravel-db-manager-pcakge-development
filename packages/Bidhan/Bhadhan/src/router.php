@@ -15,3 +15,6 @@ Route::get("bhadhan/db-manager/performance-metrics", [SchemaController::class, '
 
 Route::get("bhadhan/db-manager/sql", [SchemaController::class, 'sql'])
     ->name('bhadhan-db-manager.sql');
+
+Route::post("bhadhan/db-manager/sql", [SchemaController::class, 'sqlToData'])
+    ->name('bhadhan-db-manager.sqlToData');
