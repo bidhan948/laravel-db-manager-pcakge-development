@@ -22,9 +22,28 @@
         <div class="container-fluid">
             <div class="col-12">
                 <div class="form-group">
-                    <label for="raw_sql mt-1 sql-label">Enter Your SQL Query:</label>
-                    <div id="editor" class="editor" contenteditable="true" @input="updateRawSql" ref="editor"></div>
+                    <p class="sql-label mt-1">Enter Your SQL Query :</p>
+                    <div id="editor" class="editor" contenteditable="true" @input="updateRawSql" @keydown="handleKeydown"
+                        ref="editor"></div>
                 </div>
+            </div>
+            <div :class="sqlData.length ? 'sql-table-div col-12' : 'col-12'" v-if="sqlData">
+                <table class="table mt-1 table-bordered" style="overflow-x: scroll;">
+                    <thead class="thead-dark">
+                        <tr>
+                            <template v-for="(columnName,columnNameKey) in columnNames">
+                                <th class="f-08" v-text="columnName"></th>
+                            </template>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="f-08 text-white" v-for="(row,rowKey) in sqlData">
+                            <template v-for="(columnValue,columnValueKey) in columnNames">
+                                <td class="f-08" v-html="row[columnValue] ? row[columnValue] :'<i>'+null+'</i>' "></td>
+                            </template>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -37,7 +56,9 @@
         new Vue({
             el: "#vue_app",
             data: {
-                rawSql: ""
+                rawSql: "",
+                columnNames: [],
+                sqlData: []
             },
             methods: {
                 updateRawSql: function() {
@@ -57,6 +78,25 @@
                     sel.removeAllRanges();
                     sel.addRange(range);
                     editor.focus();
+                },
+                handleKeydown: function(event) {
+                    let vm = this;
+                    if (event.ctrlKey && event.key === 'Enter') {
+                        event.preventDefault();
+                        vm.submitQuery();
+                    }
+                },
+                submitQuery: function() {
+                    let vm = this;
+                    axios.post("{{ route('bhadhan-db-manager.sqlToData') }}", {
+                        rawSql: vm.rawSql
+                    }).then(function(res) {
+                        vm.columnNames = res.data.columnNames;
+                        vm.sqlData = res.data.fetchFromSql;
+                        console.log(res);
+                    }).catch(function(err) {
+                        console.log(err);
+                    });
                 }
             },
             mounted() {

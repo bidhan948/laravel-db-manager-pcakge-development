@@ -18,19 +18,19 @@
     height: 25px;
 }
 
-.lh-08{
+.lh-08 {
     line-height: 8px;
 }
 
-.f-08{
+.f-08 {
     font-size: 0.8rem;
 }
 
-.f-09{
+.f-09 {
     font-size: 0.9rem;
 }
 
-.lh-06{
+.lh-06 {
     line-height: 6px;
 }
 
@@ -101,13 +101,18 @@ body,
     font-size: 0.9rem;
 }
 
-.cursor-pointer{
+.cursor-pointer {
     cursor: pointer;
 }
 
-.sql-label{
-    text-align: center;
-    color: white;
+.sql-label {
+    text-align: center !important;
+    color: white !important;
+}
+
+.sql-table-div {
+    width: 97vw !important;
+    overflow: scroll !important;
 }
 
 /* ANIMATION ALERT */
