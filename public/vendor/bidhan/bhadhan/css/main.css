@@ -133,20 +133,56 @@ body,
     outline: none;
 }
 
+.sql-table-div table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
 .sql-table-div thead th {
     position: sticky;
     top: 0;
     background-color: #343a40;
     color: white;
     z-index: 1;
+    padding: 8px;
+    text-align: center;
+    border: 1px solid #ddd;
 }
 
 .sql-table-div tbody tr:nth-child(even) {
-    background-color: #2d2d2d;
+    background-color: #f2f2f2;
 }
 
 .sql-table-div tbody tr:nth-child(odd) {
-    background-color: #3a3a3a;
+    background-color: #fff;
+}
+
+.sql-table-div tbody td {
+    padding: 8px;
+    text-align: left;
+    border: 1px solid #ddd;
+    font-family: monospace;
+    color: #333;
+}
+
+.sql-table-div tbody td i {
+    color: #999;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-white {
+    color: white;
+}
+
+.f-08 {
+    font-size: 0.8rem;
+}
+
+.text-danger-imp{
+    color: red !important;
 }
 
 /* ANIMATION ALERT */
