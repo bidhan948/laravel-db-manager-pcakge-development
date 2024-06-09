@@ -111,8 +111,42 @@ body,
 }
 
 .sql-table-div {
-    width: 97vw !important;
+    width: 96vw !important;
     overflow: scroll !important;
+    height: 60vh !important;
+}
+
+.border-3px {
+    border: 3px solid;
+}
+
+.editor {
+    background-color: #2d2d2d;
+    color: #f8f8f2;
+    padding: 10px;
+    border-radius: 5px;
+    font-family: monospace;
+    min-height: 100px;
+    max-height: 500px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    outline: none;
+}
+
+.sql-table-div thead th {
+    position: sticky;
+    top: 0;
+    background-color: #343a40;
+    color: white;
+    z-index: 1;
+}
+
+.sql-table-div tbody tr:nth-child(even) {
+    background-color: #2d2d2d;
+}
+
+.sql-table-div tbody tr:nth-child(odd) {
+    background-color: #3a3a3a;
 }
 
 /* ANIMATION ALERT */

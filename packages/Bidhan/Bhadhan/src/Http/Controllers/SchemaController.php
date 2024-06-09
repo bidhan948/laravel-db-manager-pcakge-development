@@ -59,8 +59,21 @@ class SchemaController extends Controller
     {
         try {
             $rawSql = $request->rawSql;
+            $executionTime = 0;
+
+            DB::listen(function ($query) use (&$executionTime, $rawSql) {
+                if ($query->sql == $rawSql) {
+                    $executionTime = $query->time;
+                }
+            });
+
             $data['fetchFromSql'] = DB::select($rawSql);
-            $data['columnNames'] = count($data['fetchFromSql']) ?  array_keys((array)$data['fetchFromSql'][0]) : [];
+            $rowCount = count($data['fetchFromSql']);
+            $data['executionTime'] = $executionTime . " ms";
+            $data['columnNames'] = $rowCount ? array_keys((array)$data['fetchFromSql'][0]) : [];
+            $data['timestamp'] = now()->format('Y-m-d H:i:s');
+            $data['summary'] = "✅ {$rowCount} row(s) fetched - {$executionTime} ms, on {$data['timestamp']}";
+
             return response()->json($data);
         } catch (\Exception $e) {
             return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
