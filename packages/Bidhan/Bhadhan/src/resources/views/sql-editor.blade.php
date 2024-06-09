@@ -17,33 +17,91 @@
             white-space: pre-wrap;
             outline: none;
         }
+    
+        .sql-table-div {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+    
+        .sql-table-div table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+    
+        .sql-table-div thead th {
+            position: sticky;
+            top: 0;
+            background-color: #343a40;
+            color: white;
+            z-index: 1;
+            padding: 8px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+    
+        .sql-table-div tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    
+        .sql-table-div tbody tr:nth-child(odd) {
+            background-color: #fff;
+        }
+    
+        .sql-table-div tbody td {
+            padding: 8px;
+            text-align: left;
+            border: 1px solid #ddd;
+            font-family: monospace;
+            color: #333;
+        }
+    
+        .sql-table-div tbody td i {
+            color: #999;
+        }
+    
+        .text-center {
+            text-align: center;
+        }
+    
+        .text-white {
+            color: white;
+        }
+    
+        .f-08 {
+            font-size: 0.8rem;
+        }
     </style>
+    
     <div id="vue_app">
         <div class="container-fluid">
             <div class="col-12">
                 <div class="form-group">
-                    <p class="sql-label mt-1">Enter Your SQL Query :</p>
-                    <div id="editor" class="editor" contenteditable="true" @input="updateRawSql" @keydown="handleKeydown"
-                        ref="editor"></div>
+                    <p class="sql-label mt-1 mb-0">Enter Your SQL Query :</p>
+                    <div id="editor" class="editor" contenteditable="true" @input="updateRawSql" @keydown="handleKeydown" ref="editor"></div>
                 </div>
             </div>
             <div :class="sqlData.length ? 'sql-table-div col-12' : 'col-12'" v-if="sqlData">
-                <table class="table mt-1 table-bordered" style="overflow-x: scroll;">
+                <table class="table mt-1 table-bordered">
                     <thead class="thead-dark">
                         <tr>
-                            <template v-for="(columnName,columnNameKey) in columnNames">
+                            <template v-for="(columnName, columnNameKey) in columnNames">
                                 <th class="f-08" v-text="columnName"></th>
                             </template>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="f-08 text-white" v-for="(row,rowKey) in sqlData">
-                            <template v-for="(columnValue,columnValueKey) in columnNames">
-                                <td class="f-08" v-html="row[columnValue] ? row[columnValue] :'<i>'+null+'</i>' "></td>
+                        <tr class="f-08 text-white" v-for="(row, rowKey) in sqlData">
+                            <template v-for="(columnValue, columnValueKey) in columnNames">
+                                <td class="f-08" v-html="row[columnValue] ? row[columnValue] : '<i>' + null + '</i>'"></td>
                             </template>
                         </tr>
                     </tbody>
                 </table>
+            </div>
+            <div class="row" v-if="messageSummary">
+                <div class="col-12 mt-0 text-center">
+                    <span v-text="messageSummary" class="text-center text-white"></span>
+                </div>
             </div>
         </div>
     </div>
@@ -58,7 +116,8 @@
             data: {
                 rawSql: "",
                 columnNames: [],
-                sqlData: []
+                sqlData: [],
+                messageSummary: null
             },
             methods: {
                 updateRawSql: function() {
@@ -93,6 +152,7 @@
                     }).then(function(res) {
                         vm.columnNames = res.data.columnNames;
                         vm.sqlData = res.data.fetchFromSql;
+                        vm.messageSummary = res.data.summary;
                         console.log(res);
                     }).catch(function(err) {
                         console.log(err);
