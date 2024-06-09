@@ -3,7 +3,7 @@
 @section('title', 'DB - SCHEMA | SQL Editor')
 
 @section('content')
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <link href="{{ asset('vendor/bidhan/bhadhan/css/prism-tomorrow.min.css') }}" rel="stylesheet" />
     <div id="vue_app">
         <div class="container-fluid">
             <div class="col-12">
@@ -45,8 +45,10 @@
     </div>
 @endsection
 @section('scripts')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/prism.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-sql.min.js"></script>
+    <script src="{{ asset('vendor/bidhan/bhadhan/js/prism.min.js') }}"></script>
+    {{-- https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/prism.min.js --}}
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-sql.min.js"></script> --}}
+    <script src="{{ asset('vendor/bidhan/bhadhan/js/prism-sql.min.js') }}"></script>
     <script>
         new Vue({
             el: "#vue_app",
@@ -141,6 +143,3 @@
         });
     </script>
 @endsection
-
-
-
